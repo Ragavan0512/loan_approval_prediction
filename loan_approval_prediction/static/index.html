@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vanguard Credit Risk Analytics</title>
+    <meta name="description" content="AI-Powered Credit Risk Assessment and Portfolio Default Analytics Dashboard.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles.css">
+    <!-- Chart.js for visualization -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- JavaScript Controller -->
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar / Navigation -->
+        <aside class="sidebar">
+            <div class="logo-area">
+                <div class="logo-icon">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+                <h2>Vanguard</h2>
+                <span>RISK INTEL</span>
+            </div>
+            
+            <nav class="nav-menu">
+                <button class="nav-btn active" data-tab="single-tab">
+                    <i class="fa-solid fa-user-shield"></i>
+                    <span>Single Applicant</span>
+                </button>
+                <button class="nav-btn" data-tab="batch-tab">
+                    <i class="fa-solid fa-table-list"></i>
+                    <span>Batch Analysis</span>
+                </button>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="system-status">
+                    <span class="status-dot online"></span>
+                    <span>Model Engine Online</span>
+                </div>
+                <div class="model-version">XGBoost v1.7.5</div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="top-header">
+                <div class="header-title">
+                    <h1>Credit Risk Assessment</h1>
+                    <p class="subtitle">Evaluate borrower default probability using machine learning intelligence.</p>
+                </div>
+                <div class="user-profile">
+                    <div class="avatar">
+                        <i class="fa-solid fa-user-tie"></i>
+                    </div>
+                    <div class="user-info">
+                        <span class="username">Risk Officer</span>
+                        <span class="role">Administrator</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Dashboard Grid -->
+            <div class="dashboard-grid">
+                
+                <!-- Tab 1: Single Applicant Form -->
+                <section id="single-tab" class="tab-pane active">
+                    <div class="glass-card form-card">
+                        <div class="card-header">
+                            <h3><i class="fa-solid fa-sliders"></i> Applicant Parameters</h3>
+                            <p>Adjust inputs to simulate borrower characteristics.</p>
+                        </div>
+                        
+                        <form id="prediction-form" class="prediction-form">
+                            <!-- Categorized Form Sections -->
+                            <div class="form-sections-container">
+                                
+                                <!-- Category: Personal Details -->
+                                <div class="form-section">
+                                    <h4 class="section-title"><i class="fa-solid fa-circle-user"></i> Personal Profile</h4>
+                                    <div class="form-group-grid">
+                                        <div class="form-group">
+                                            <label for="input-AGE">Applicant Age</label>
+                                            <div class="range-container">
+                                                <input type="range" id="input-AGE" name="AGE" min="20" max="70" value="43" step="1">
+                                                <span class="range-val" id="val-AGE">43 years</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label for="input-CODE_GENDER_M">Gender</label>
+                                            <select id="input-CODE_GENDER_M" name="CODE_GENDER_M">
+                                                <option value="0">Female</option>
+                                                <option value="1">Male</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label for="input-NAME_FAMILY_STATUS_Married">Marital Status</label>
+                                            <select id="input-NAME_FAMILY_STATUS_Married" name="NAME_FAMILY_STATUS_Married">
+                                                <option value="1">Married</option>
+                                                <option value="0">Single / Other</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="input-NAME_EDUCATION_TYPE">Education Level</label>
+                                            <select id="input-NAME_EDUCATION_TYPE" name="NAME_EDUCATION_TYPE">
+                                                <option value="NAME_EDUCATION_TYPE_Secondary / secondary special">Secondary Education</option>
+                                                <option value="NAME_EDUCATION_TYPE_Higher education">Higher Education</option>
+                                                <option value="other">Lower / Other Education</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Category: Financial Profile -->
+                                <div class="form-section">
+                                    <h4 class="section-title"><i class="fa-solid fa-wallet"></i> Financial Standing</h4>
+                                    <div class="form-group-grid">
+                                        <div class="form-group">
+                                            <label for="input-AMT_INCOME_TOTAL">Annual Income ($)</label>
+                                            <input type="number" id="input-AMT_INCOME_TOTAL" name="AMT_INCOME_TOTAL" value="150000" min="1000" max="10000000">
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label for="input-AMT_CREDIT">Requested Loan Credit ($)</label>
+                                            <input type="number" id="input-AMT_CREDIT" name="AMT_CREDIT" value="500000" min="5000" max="10000000">
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label for="input-AMT_ANNUITY">Annual Annuity Payment ($)</label>
+                                            <input type="number" id="input-AMT_ANNUITY" name="AMT_ANNUITY" value="25000" min="500" max="1000000">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="input-AMT_GOODS_PRICE">Financed Goods Price ($)</label>
+                                            <input type="number" id="input-AMT_GOODS_PRICE" name="AMT_GOODS_PRICE" value="450000" min="1000" max="10000000">
+                                        </div>
+                                        
+                                        <div class="form-group col-span-2">
+                                            <label>Credit-to-Annuity Term Ratio (calculated)</label>
+                                            <div class="calculated-ratio" id="calc-credit-term">0.05</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Category: Employment & Assets -->
+                                <div class="form-section">
+                                    <h4 class="section-title"><i class="fa-solid fa-briefcase"></i> Employment & Assets</h4>
+                                    <div class="form-group-grid">
+                                        <div class="form-group">
+                                            <label for="input-EMPLOYMENT_YEARS">Employment Duration</label>
+                                            <div class="range-container">
+                                                <input type="range" id="input-EMPLOYMENT_YEARS" name="EMPLOYMENT_YEARS" min="0" max="45" value="4.5" step="0.5">
+                                                <span class="range-val" id="val-EMPLOYMENT_YEARS">4.5 years</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label for="input-NAME_INCOME_TYPE_Pensioner">Is Pensioner</label>
+                                            <select id="input-NAME_INCOME_TYPE_Pensioner" name="NAME_INCOME_TYPE_Pensioner">
+                                                <option value="0">No</option>
+                                                <option value="1">Yes</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label for="input-OCCUPATION_TYPE_Core staff">Is Core Staff</label>
+                                            <select id="input-OCCUPATION_TYPE_Core staff" name="OCCUPATION_TYPE_Core staff">
+                                                <option value="0">No</option>
+                                                <option value="1">Yes</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="input-FLAG_OWN_CAR_Y">Owns Vehicle</label>
+                                            <select id="input-FLAG_OWN_CAR_Y" name="FLAG_OWN_CAR_Y">
+                                                <option value="0">No</option>
+                                                <option value="1">Yes</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Category: External Factors & Risks -->
+                                <div class="form-section">
+                                    <h4 class="section-title"><i class="fa-solid fa-triangle-exclamation"></i> Risk Identifiers</h4>
+                                    <div class="form-group-grid">
+                                        <div class="form-group">
+                                            <label for="input-EXT_SOURCE_2">External Score Source 2</label>
+                                            <div class="range-container">
+                                                <input type="range" id="input-EXT_SOURCE_2" name="EXT_SOURCE_2" min="0" max="1" value="0.56" step="0.01">
+                                                <span class="range-val" id="val-EXT_SOURCE_2">0.56</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="input-EXT_SOURCE_3">External Score Source 3</label>
+                                            <div class="range-container">
+                                                <input type="range" id="input-EXT_SOURCE_3" name="EXT_SOURCE_3" min="0" max="1" value="0.53" step="0.01">
+                                                <span class="range-val" id="val-EXT_SOURCE_3">0.53</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="input-REGION_RATING_CLIENT_W_CITY">City Region Rating</label>
+                                            <select id="input-REGION_RATING_CLIENT_W_CITY" name="REGION_RATING_CLIENT_W_CITY">
+                                                <option value="2">2 - Standard</option>
+                                                <option value="1">1 - High (Lower Risk)</option>
+                                                <option value="3">3 - Low (Higher Risk)</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="input-DEF_60_CNT_SOCIAL_CIRCLE">Social Defaults (60 days)</label>
+                                            <input type="number" id="input-DEF_60_CNT_SOCIAL_CIRCLE" name="DEF_60_CNT_SOCIAL_CIRCLE" value="0" min="0" max="25">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="input-NAME_CONTRACT_TYPE_Revolving loans">Contract Loan Type</label>
+                                            <select id="input-NAME_CONTRACT_TYPE_Revolving loans" name="NAME_CONTRACT_TYPE_Revolving loans">
+                                                <option value="0">Cash Loan</option>
+                                                <option value="1">Revolving Loan</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-primary" id="btn-submit">
+                                    <i class="fa-solid fa-wand-magic-sparkles"></i> Run Risk Analysis
+                                </button>
+                                <button type="button" class="btn btn-secondary" id="btn-reset">
+                                    <i class="fa-solid fa-rotate-left"></i> Reset Defaults
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Single Result Panel -->
+                    <div class="glass-card result-card" id="single-result-card">
+                        <div class="card-header">
+                            <h3><i class="fa-solid fa-chart-pie"></i> Risk Evaluation Report</h3>
+                            <p>Real-time machine learning prediction output.</p>
+                        </div>
+                        
+                        <div class="result-placeholder" id="single-placeholder">
+                            <i class="fa-solid fa-shield-cat-loading fa-spin-pulse"></i>
+                            <h4>Awaiting Assessment Input</h4>
+                            <p>Configure parameters on the left and trigger prediction analysis.</p>
+                        </div>
+                        
+                        <div class="result-display hidden" id="single-result-display">
+                            <!-- Circular Score Gauge -->
+                            <div class="gauge-section">
+                                <div class="gauge-outer">
+                                    <div class="gauge-inner">
+                                       <span class="gauge-label">REPAYMENT</span>
+                                       <span class="gauge-score" id="result-score">92.4%</span>
+                                       <span class="gauge-scale">PROBABILITY</span>
+                                   </div>
+                                    <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="180px" height="180px">
+                                        <circle cx="90" cy="90" r="80" stroke-linecap="round" id="gauge-circle" />
+                                    </svg>
+                                </div>
+                                <div class="risk-badge-container">
+                                    <span class="risk-badge risk-medium" id="result-rating">Moderate Risk (Good)</span>
+                                </div>
+                            </div>
+
+                            <div class="metrics-grid">
+                                <div class="metric-box">
+                                    <span class="metric-title">Repayment Prob.</span>
+                                    <span class="metric-value" id="result-prob-repay">92.4%</span>
+                                </div>
+                                <div class="metric-box">
+                                    <span class="metric-title">Default Risk Prob.</span>
+                                    <span class="metric-value" id="result-prob-default">7.6%</span>
+                                </div>
+                            </div>
+
+                            <div class="risk-factors">
+                                <h5><i class="fa-solid fa-circle-nodes"></i> Contribution Factors</h5>
+                                <ul id="result-reasons">
+                                    <li>Strong financial indicators and external ratings.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Tab 2: Batch Analysis Pane -->
+                <section id="batch-tab" class="tab-pane">
+                    <div class="glass-card batch-upload-card col-span-2">
+                        <div class="card-header batch-results-header">
+                            <div>
+                                <h3><i class="fa-solid fa-file-csv"></i> Batch Portfolio Upload</h3>
+                                <p>Upload a CSV file containing applicant features for batch risk scoring.</p>
+                            </div>
+                            <a href="sample_batch_applicants.csv" download class="btn btn-secondary btn-sm" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
+                                <i class="fa-solid fa-file-arrow-down"></i> Download Sample CSV
+                            </a>
+                        </div>
+                        
+                        <div class="upload-dropzone" id="dropzone">
+                            <i class="fa-solid fa-cloud-arrow-up"></i>
+                            <h4>Drag & Drop CSV File here</h4>
+                            <p>or click to browse your computer</p>
+                            <span class="file-hint">Accepts standard HomeCredit format columns (SK_ID_CURR, AMT_INCOME_TOTAL, AMT_CREDIT, etc.)</span>
+                            <input type="file" id="batch-file-input" accept=".csv" class="hidden">
+                        </div>
+
+                        <div class="selected-file-area hidden" id="file-info-container">
+                            <div class="file-info-box">
+                                <i class="fa-solid fa-file-excel"></i>
+                                <div class="file-details">
+                                    <span class="file-name" id="file-name-display">applicants.csv</span>
+                                    <span class="file-size" id="file-size-display">1.2 MB</span>
+                                </div>
+                                <button class="btn-remove-file" id="btn-remove-file"><i class="fa-solid fa-xmark"></i></button>
+                            </div>
+                            <button class="btn btn-primary" id="btn-run-batch">
+                                <i class="fa-solid fa-circle-play"></i> Execute Batch Prediction
+                            </button>
+                        </div>
+
+                        <!-- Loading overlay -->
+                        <div class="batch-loading hidden" id="batch-loading">
+                            <div class="spinner"></div>
+                            <h4>Processing Credit Risk Model...</h4>
+                            <p>Evaluating portfolio risk curves and standardizing features...</p>
+                        </div>
+                    </div>
+
+                    <!-- Batch Result Report -->
+                    <div class="glass-card batch-results-card col-span-2 hidden" id="batch-results-display">
+                        <div class="card-header batch-results-header">
+                            <div>
+                                <h3><i class="fa-solid fa-square-poll-vertical"></i> Portfolio Assessment Summary</h3>
+                                <p>Batch model results for uploaded cohort.</p>
+                            </div>
+                            <button class="btn btn-secondary btn-sm" id="btn-download-csv">
+                                <i class="fa-solid fa-download"></i> Export Predictions CSV
+                            </button>
+                        </div>
+
+                        <!-- Summary Cards -->
+                        <div class="summary-cards-grid">
+                            <div class="summary-card">
+                                <span class="summary-title">Total Evaluated</span>
+                                <span class="summary-value" id="summary-total">0</span>
+                            </div>
+                            <div class="summary-card">
+                                <span class="summary-title">Avg Repayment Prob</span>
+                                <span class="summary-value text-green" id="summary-avg-repay">0.0%</span>
+                            </div>
+                            <div class="summary-card">
+                                <span class="summary-title">Avg Default Prob.</span>
+                                <span class="summary-value" id="summary-avg-default">0.0%</span>
+                            </div>
+                            <div class="summary-card">
+                                <span class="summary-title">High Risk Flags</span>
+                                <span class="summary-value text-red" id="summary-high-risk">0</span>
+                            </div>
+                        </div>
+
+                        <!-- Portfolio Visuals -->
+                        <div class="portfolio-charts-container">
+                            <div class="chart-box">
+                                <h5>Risk Distribution Class</h5>
+                                <div class="chart-wrapper">
+                                    <canvas id="riskDistributionChart"></canvas>
+                                </div>
+                            </div>
+                            <div class="chart-box">
+                                <h5>Income vs Credit Risk Profile</h5>
+                                <div class="chart-wrapper">
+                                    <canvas id="incomeCreditRiskChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Results Table -->
+                        <div class="table-container">
+                            <h5>Applicant-Level Scorecard</h5>
+                            <table class="results-table" id="results-table">
+                                <thead>
+                                    <tr>
+                                        <th>Applicant ID</th>
+                                        <th>Income</th>
+                                        <th>Loan Credit</th>
+                                        <th>Default Risk</th>
+                                        <th>Repayment Prob</th>
+                                        <th>Risk Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-body">
+                                    <!-- Dynamic rows -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+</body>
+</html>
